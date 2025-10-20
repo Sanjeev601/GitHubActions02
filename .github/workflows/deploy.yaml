@@ -18,6 +18,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::084828603933:role/GitHubActions02Role
+          role-session-name: GitHubActionsSession
           aws-region: eu-east-1
       
       - name: Test AWS Credentials
