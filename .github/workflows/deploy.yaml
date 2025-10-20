@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{secrets.AWS_IAM_ROLE}}
+          aws-region: eu-east-1
+      
+      - name: Test AWS Credentials
+        run: aws sts get-caller-identity
+
+      - name: Deploy CloudFormation stack
+        run: |
+          aws cloudformation deploy \
+            --template-file simple_s3_template.yaml \
+            --stack-name GitHubActionsCloudStack01 \
+            --capabilities CAPABILITY_NAMED_IAM
