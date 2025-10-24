@@ -1,8 +1,36 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Simple CloudFormation template to create an S3 bucket
+Description: Simple EC2 Instance Windows 2019 Server with 2019 access with RDP access
 
 Resources:
-  MyS3Bucket:
-    Type: 'AWS::S3::Bucket'
+  WindowsSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      BucketName:  'sanjeev-cloudformation-s3-bucket'
+      GroupDescription: Enable RDP access via port 3389
+      VpcId: 'vpc-0f0cd80060690caa0'  # Replace with your actual VPC ID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: '0.0.0.0/0'  # Open to the world; restrict as needed
+      Tags:
+        - Key: Name
+          Value: WindowsSG01
+
+  WindowsInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0d8940f0876d45867  # Windows Server 2019 Base AMI in us-east-1
+      KeyPair: !Ref WindowsKeyPair
+      SubnetId: 'subnet-0b49f78100634ca3f'  # Replace with actual subnet ID
+      SecurityGroups:
+        - !Ref WindowsSecurityGroup # Reference the security group created above
+      Tags:
+        - Key: Name
+          Value: SanjeevDC01
+
+  WindowsKeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: 'keypair007'  # Replace with your actual key pair name
+
