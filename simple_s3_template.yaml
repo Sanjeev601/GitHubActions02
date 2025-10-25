@@ -32,5 +32,4 @@ Resources:
       ImageId: ami-0d8940f0876d45867  # Windows Server 2019 Base AMI in us-east-1
       SecurityGroupIds:
         - Ref: InstanceSecurityGroup
-      KeyName:
-        Ref: MyKeypair
+      KeyName: GitHubActionsKeyPair01
