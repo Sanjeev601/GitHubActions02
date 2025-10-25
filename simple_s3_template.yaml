@@ -22,6 +22,8 @@ Resources:
       Tags:
         - Key: Name
           Value: GitHubActionsKeyPair01
+      keyType: rsa
+      keyFormat: pem
 
   MyInstance:
     Type: 'AWS::EC2::Instance'
