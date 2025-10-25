@@ -19,8 +19,9 @@ Resources:
     Type: 'AWS::EC2::KeyPair'
     Properties:
       KeyName: GitHubActionsKeyPair01
-      keyType: rsa
-      keyFormat: pem
+      Tags:
+        - Key: Name
+          Value: GitHubActionsKeyPair01
 
   MyInstance:
     Type: 'AWS::EC2::Instance'
