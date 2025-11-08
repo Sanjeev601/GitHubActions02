@@ -1,21 +1,38 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Description: Grant existing IAM user 'joboro' permission to create S3 buckets
-
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Simple EC2 Instance Windows 2019 Server with 2019 access with RDP access
 Resources:
-  JoboroS3Policy:
-    Type: AWS::IAM::Policy
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      PolicyName: AllowS3BucketCreation
-      Users:
-        - joboro   # existing IAM user
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:CreateBucket
-              - s3:PutBucketAcl
-              - s3:PutBucketPolicy
-              - s3:PutBucketPublicAccessBlock
-              - s3:PutEncryptionConfiguration
-            Resource: "*"
+      GroupDescription: Enable RDP access via port 3389
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: '0.0.0.0/0'  # Open to the world; restrict as needed
+      Tags:
+        - Key: Name
+          Value: WindowsSG01
+
+  MyKeypair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: GitHubActionsKeyPair01
+      Tags:
+        - Key: Name
+          Value: GitHubActionsKeyPair01
+      keyType: rsa
+      keyFormat: pem
+
+  MyInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0d8940f0876d45867  # Windows Server 2019 Base AMI in us-east-1
+      SecurityGroupIds:
+        - Ref: InstanceSecurityGroup
+      KeyName: 
+        Ref: MyKeypair
+      Tags:
+        - Key: Name
+          Value: Server01
