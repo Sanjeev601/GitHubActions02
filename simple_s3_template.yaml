@@ -24,4 +24,4 @@ Resources:
       KeyName: TestKeyPair01
       Tags:
         - Key: Name
-          Value: Server01
+          Value: Server02
