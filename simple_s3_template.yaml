@@ -14,16 +14,6 @@ Resources:
         - Key: Name
           Value: WindowsSG01
 
-  MyKeypair:
-    Type: 'AWS::EC2::KeyPair'
-    Properties:
-      KeyName: GitHubActionsKeyPair01
-      Tags:
-        - Key: Name
-          Value: GitHubActionsKeyPair01
-      keyType: rsa
-      keyFormat: pem
-
   MyInstance:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -32,7 +22,7 @@ Resources:
       SecurityGroupIds:
         - Ref: InstanceSecurityGroup
       KeyName: 
-        Ref: MyKeypair
+        Ref: TestKeyPair01
       Tags:
         - Key: Name
           Value: Server01
